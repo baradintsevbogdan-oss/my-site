@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zaproszenie dla Kingi ❤️</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        /* --- РОМАНТИЧНЫЙ СТИЛЬ --- */
+        * {
+            box-sizing: border-box;
+            font-family: 'Nunito', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ffe5ec, #ffc2d1, #f0e6ff);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Парящие сердечки */
+        .background-animation {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            background-color: #ff8fab;
+            display: inline-block;
+            height: 12px;
+            margin: 0 10px;
+            position: relative;
+            top: 0;
+            transform: rotate(-45deg);
+            width: 12px;
+            opacity: 0;
+            animation: floatHeart 7s infinite linear;
+            border-radius: 50% 50% 0 0;
+        }
+
+        .heart:before, .heart:after {
+            content: "";
+            background-color: #ff8fab;
+            border-radius: 50%;
+            height: 12px;
+            position: absolute;
+            width: 12px;
+        }
+
+        .heart:before { top: -6px; left: 0; }
+        .heart:after { left: 6px; top: 0; }
+
+        @keyframes floatHeart {
+            0% { transform: translateY(105vh) rotate(-45deg) scale(0.6); opacity: 0; }
+            20% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) rotate(-45deg) scale(1.2); opacity: 0; }
+        }
+
+        /* Карточка */
+        .card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            padding: 35px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 75, 130, 0.15), 0 5px 15px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            text-align: center;
+            max-width: 480px;
+            width: 90%;
+            min-height: 520px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .step {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+            width: 100%;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .step.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        h2 {
+            color: #ff477e;
+            font-size: 24px;
+            font-weight: 800;
+            line-height: 1.4;
+            margin-bottom: 20px;
+        }
+        
+        .handwritten {
+            font-family: 'Caveat', cursive;
+            font-size: 32px;
+            color: #ff5c8a;
+            line-height: 1.2;
+        }
+
+        .sub-text {
+            color: #8a7a80;
+            font-size: 15px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(255, 143, 171, 0.2);
+            border: 3px solid #fff;
+        }
+
+        /* Кнопки */
+        .btn-main {
+            padding: 14px 35px;
+            font-size: 16px;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 6px 15px rgba(255, 71, 126, 0.3);
+            background: linear-gradient(135deg, #ff758f, #ff477e);
+            color: white;
+            white-space: nowrap;
+        }
+
+        .btn-main:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(255, 71, 126, 0.4);
+        }
+
+        /* Контейнер кнопок на первом экране */
+        .btn-container-step1 {
+            position: relative;
+            width: 100%;
+            height: 140px; /* Фиксированная зона для маневров кнопки NIE */
+            margin-top: 15px;
+        }
+
+        #yes-btn {
+            background: linear-gradient(135deg, #52b788, #74c69d);
+            box-shadow: 0 6px 15px rgba(82, 183, 136, 0.3);
+            position: absolute;
+            left: 20%;
+            top: 40px;
+            transform: translate(-50%, -50%);
+            z-index: 100;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* КНОПКА NIE: Теперь ходит строго плавно и локально внутри карточки */
+        #no-btn {
+            background: linear-gradient(135deg, #ff4d6d, #ff758f);
+            box-shadow: 0 6px 15px rgba(255, 77, 109, 0.3);
+            position: absolute;
+            left: 70%;
+            top: 40px;
+            transform: translate(-50%, -50%);
+            z-index: 99;
+            /* Плавное, слегка замедленное перемещение */
+            transition: top 0.6s cubic-bezier(0.25, 1, 0.5, 1), 
+                        left 0.6s cubic-bezier(0.25, 1, 0.5, 1), 
+                        opacity 0.4s ease;
+        }
+
+        /* Селекторы плиток */
+        .grid-selection {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .tile-btn {
+            background: #fff0f3;
+            border: 2px solid #ffccd5;
+            border-radius: 20px;
+            padding: 16px 12px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #c9184a;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tile-btn:hover {
+            border-color: #ff477e;
+            background: #ffb3c1;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .tile-btn.selected {
+            border-color: #ff477e;
+            background: linear-gradient(135deg, #ff758f, #ff477e);
+            color: #fff;
+            box-shadow: 0 6px 12px rgba(255, 71, 126, 0.2);
+        }
+
+        .full-row { grid-column: span 2; }
+
+        /* Календарь */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .cal-btn {
+            background: #fff0f3;
+            border: 2px solid #ffccd5;
+            color: #c9184a;
+            padding: 12px;
+            border-radius: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        .cal-btn:hover { background: #ffccd5; }
+
+        .cal-btn.selected, .time-btn.selected {
+            background: linear-gradient(135deg, #ff758f, #ff477e);
+            color: white;
+            border-color: #ff477e;
+        }
+
+        .time-section {
+            width: 100%;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+        }
+
+        .time-section.visible { max-height: 200px; }
+
+        .time-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            width: 100%;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .time-btn {
+            background: #fff;
+            border: 1.5px solid #ffccd5;
+            color: #ff477e;
+            padding: 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s ease;
+        }
+        .time-btn:hover { background: #fff0f3; }
+
+        /* Билет */
+        .ticket {
+            border: 2px dashed #ffb3c1;
+            background: #fff5f7;
+            padding: 24px;
+            border-radius: 20px;
+            width: 100%;
+            text-align: left;
+            position: relative;
+            margin-bottom: 20px;
+            box-shadow: inset 0 0 20px rgba(255, 240, 243, 0.5);
+        }
+
+        .ticket-item {
+            margin-bottom: 12px;
+            font-size: 15px;
+            color: #5c4d52;
+        }
+
+        .ticket-item b { color: #ff477e; }
+
+        .barcode {
+            width: 100%;
+            height: 35px;
+            background: repeating-linear-gradient(90deg, #ff758f, #ff758f 2px, transparent 2px, transparent 6px);
+            margin-top: 15px;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="background-animation" id="bg-hearts"></div>
+
+<div class="card">
+    <div class="step active" id="step0">
+        <img src="https://cs14.pikabu.ru/post_img/2023/09/11/10/1694454507121342644.jpg" alt="Zawstydzony kot">
+        <h2 class="handwritten">Nie potrafię pięknie mówić... ale pomyślałem, że spróbuję zrobić coś fajnego.</h2>
+        <button class="btn-main" style="background: linear-gradient(135deg, #ff99ac, #ff5c8a);" onclick="changeStep(1)">Zobacz 😺</button>
+    </div>
+
+    <div class="step" id="step1">
+        <img id="ask-cat" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxeGnwbK8qA0X5OIdbcTVsPvrDei0ubXQErl1sDUslPQ&s=10" alt="Kot z kwiatkiem">
+        <h2>Kinia, czy wyjdziesz ze mną na randkę?</h2>
+        <div class="btn-container-step1" id="box-container">
+            <button class="btn-main" id="yes-btn" onclick="celebrateSuccess()">TAK</button>
+            <button class="btn-main" id="no-btn" onmouseover="handleNoButton()" onclick="handleNoButton()">NIE</button>
+        </div>
+    </div>
+
+    <div class="step" id="step2">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKoydoXLuHjdPJLTAKhctKD1rMwrJKRchHHRLqRU5U7HmWiyybasQgoiuE&s=10" alt="Szczęśliwy kot">
+        <h2 style="font-size: 28px; margin-bottom: 5px; color: #ff477e;">YESSS!</h2>
+        <p class="sub-text" style="font-size: 18px; color: #ff758f; font-weight: 700;">W końcu się zgodziłaś.</p>
+        <p class="sub-text">To teraz ustalmy szczegóły 👇</p>
+        <button class="btn-main" style="background: linear-gradient(135deg, #4cc9f0, #43b0d1); box-shadow: 0 6px 15px rgba(76,201,240,0.3);" onclick="buildGastroScreen(); changeStep(3);">Dalej 👉</button>
+    </div>
+
+    <div class="step" id="step3">
+        <h2>Krok 1: Co robimy?</h2>
+        <div class="grid-selection">
+            <button class="tile-btn" onclick="selectTile('attraction', 'Gramy w bilard 🎱', this)">
+                <span>Gramy w bilard 🎱</span>
+            </button>
+            <button class="tile-btn" onclick="selectTile('attraction', 'Idziemy na kręgle/bowling 🎳', this)">
+                <span>Idziemy na kręgle 🎳</span>
+            </button>
+            <button class="tile-btn full-row" onclick="selectTile('attraction', 'Spacer po parku 🌳', this)">
+                <span>Spacer po parku 🌳</span>
+            </button>
+        </div>
+        <button class="btn-main" id="next-3" style="background: #cbd5e0; box-shadow: none; opacity: 0.5; pointer-events: none;" onclick="buildGastroScreen(); changeStep(4);">Dalej</button>
+    </div>
+
+    <div class="step" id="step4">
+        <h2>Krok 2: A co jemy?</h2>
+        <div class="grid-selection" id="gastro-container">
+            </div>
+        <button class="btn-main" id="next-4" style="background: #cbd5e0; box-shadow: none; opacity: 0.5; pointer-events: none;" onclick="changeStep(5);">Dalej</button>
+    </div>
+
+    <div class="step" id="step5">
+        <h2>Krok 3: Kiedy Ci najbardziej pasuje?</h2>
+        <div class="calendar-grid">
+            <button class="cal-btn" onclick="selectDate('14.07', this)">14.07</button>
+            <button class="cal-btn" onclick="selectDate('15.07', this)">15.07</button>
+            <button class="cal-btn" onclick="selectDate('16.07', this)">16.07</button>
+            <button class="cal-btn" onclick="selectDate('17.07', this)">17.07</button>
+            <button class="cal-btn" onclick="selectDate('18.07', this)">18.07</button>
+            <button class="cal-btn" onclick="selectDate('19.07', this)">19.07</button>
+        </div>
+        
+        <div class="time-section" id="time-section">
+            <p class="sub-text" style="margin-bottom: 5px;">Wybierz godzinę:</p>
+            <div class="time-grid">
+                <button class="time-btn" onclick="selectTime('16:00', this)">16:00</button>
+                <button class="time-btn" onclick="selectTime('17:00', this)">17:00</button>
+                <button class="time-btn" onclick="selectTime('18:00', this)">18:00</button>
+                <button class="time-btn" onclick="selectTime('19:00', this)">19:00</button>
+                <button class="time-btn" onclick="selectTime('20:00', this)">20:00</button>
+            </div>
+        </div>
+        <button class="btn-main" id="next-5" style="background: #cbd5e0; box-shadow: none; opacity: 0.5; pointer-events: none;" onclick="finalizeAndSend();">Potwierdzam rezerwację! 📆</button>
+    </div>
+
+    <div class="step" id="step6">
+        <img src="https://i.pinimg.com/236x/d0/81/dc/d081dc128a4cc676b3017962fb43c7f7.jpg" alt="Zadowolony kot" style="width: 140px; height: 140px; margin-bottom: 15px;">
+        <h2 style="margin-bottom: 10px;">Oficjalne potwierdzenie!</h2>
+        <div class="ticket">
+            <div class="ticket-item">📍 <b>Aktywność:</b> <span id="ticket-attraction"></span></div>
+            <div class="ticket-item">🍔 <b>Jedzenie:</b> <span id="ticket-food"></span></div>
+            <div class="ticket-item">📅 <b>Data:</b> <span id="ticket-date"></span></div>
+            <div class="ticket-item">⏰ <b>Godzina:</b> <span id="ticket-time"></span></div>
+            <div class="barcode"></div>
+        </div>
+        <p class="sub-text" style="font-weight: 700; color: #ff477e;">Mega fajnie 😉</p>
+    </div>
+</div>
+
+<script>
+    // --- WEBHOOK ---
+    const WEBHOOK_URL = "TWÓJ_WEBHOOK_URL_TUTAJ"; 
+
+    let appState = { attraction: '', food: '', date: '', time: '' };
+    let noCount = 0;
+    const noBtnData = [
+        { text: "Are you sure?", img: "https://img-webcalypt.ru/img/thumb/lg/images/meme-templates/4K2bw6kP1d7bItgVsaAVSWYVueUf1fUH.jpg.jpg" },
+        { text: "Serio?", img: "https://i.pinimg.com/236x/07/e0/54/07e054a4638d49777edded82be8113dd.jpg" },
+        { text: "Nie rób mi tego :(", img: "https://i.pinimg.com/236x/36/74/d6/3674d66bc785aba31f12c9847b60d7b5.jpg" },
+        { text: "Łamiesz mi serce😢", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTb8v44li70qB3-FN0-WmQXZ4zaA7A4hW50kEKhjDSJOQ&s=10" },
+        { text: "Zastanów się jeszcze raz...", img: "https://i.pinimg.com/236x/09/01/f1/0901f13277bb5a403330d16ad4c2df33.jpg" },
+      { text: "Ostatnia szansa!", img: "https://memozg.ru/img/posts/3076_642f031522af2.webp" },
+      { text: "Kliknij w końcu TAK🥺...", img: "https://images.meme-arsenal.com/882c293ab74ec77a270f3783076eb205.jpg" }
+    ];
+
+    function createBackgroundHearts() {
+        const bg = document.getElementById('bg-hearts');
+        bg.innerHTML = '';
+        for (let i = 0; i < 22; i++) {
+            let heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDelay = Math.random() * 6 + 's';
+            heart.style.animationDuration = 5 + Math.random() * 4 + 's';
+            bg.appendChild(heart);
+        }
+    }
+    createBackgroundHearts();
+
+    function changeStep(stepNum) {
+        const activeStep = document.querySelector('.step.active');
+        if (activeStep) {
+            activeStep.style.opacity = 0;
+            setTimeout(() => {
+                activeStep.classList.remove('active');
+                const nextStep = document.getElementById('step' + stepNum);
+                nextStep.classList.add('active');
+                setTimeout(() => { nextStep.style.opacity = 1; }, 50);
+            }, 400);
+        }
+    }
+
+    function celebrateSuccess() {
+        confetti({
+            particleCount: 150,
+            spread: 80,
+            origin: { y: 0.6 },
+            colors: ['#ff477e', '#ff758f', '#ffccd5', '#74c69d', '#4cc9f0']
+        });
+        changeStep(2);
+    }
+
+    // ЛОКАЛЬНОЕ И ПЛАВНОЕ ДВИЖЕНИЕ КНОПКИ NIE (СТРОГО ВНУТРИ КАРТОЧКИ)
+    function handleNoButton() {
+        const noBtn = document.getElementById('no-btn');
+        const yesBtn = document.getElementById('yes-btn');
+        const catImg = document.getElementById('ask-cat');
+
+        if (noCount < 7) {
+            if (noCount < noBtnData.length) {
+                noBtn.innerText = noBtnData[noCount].text;
+                catImg.src = noBtnData[noCount].img;
+            }
+
+            // Массив фиксированных безопасных точек внутри контейнера карточки, чтобы кнопка не скакала хаотично
+            const positions = [
+                { top: '90px', left: '75%' },
+                { top: '15px', left: '45%' },
+                { top: '95px', left: '20%' },
+                { top: '10px', left: '70%' },
+                { top: '85px', left: '50%' },
+                { top: '20px', left: '25%' }
+            ];
+
+            let pos = positions[noCount % positions.length];
+            noBtn.style.top = pos.top;
+            noBtn.style.left = pos.left;
+
+            // Мягкий контролируемый рост кнопки TAK
+            let currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+            if (currentSize < 30) {
+                yesBtn.style.fontSize = (currentSize + 2) + 'px';
+                yesBtn.style.padding = (14 + noCount * 2) + 'px ' + (35 + noCount * 4) + 'px';
+            }
+
+            noCount++;
+        } else {
+            // На 7-й раз кнопка полностью растворяется
+            noBtn.style.opacity = '0';
+            setTimeout(() => {
+                noBtn.style.display = 'none';
+            }, 400);
+
+            // Возвращаем и центрируем кнопку TAK по центру контейнера
+            yesBtn.style.left = '50%';
+            yesBtn.style.top = '40px';
+        }
+    }
+
+    function selectTile(category, value, element) {
+        const siblings = element.parentElement.querySelectorAll('.tile-btn');
+        siblings.forEach(el => el.classList.remove('selected'));
+        
+        element.classList.add('selected');
+        appState[category] = value;
+
+        if (category === 'attraction') {
+            const nextBtn = document.getElementById('next-3');
+            nextBtn.style.background = 'linear-gradient(135deg, #ff758f, #ff477e)';
+            nextBtn.style.boxShadow = '0 6px 15px rgba(255, 71, 126, 0.3)';
+            nextBtn.style.opacity = '1';
+            nextBtn.style.pointerEvents = 'auto';
+        } else if (category === 'food') {
+            const nextBtn = document.getElementById('next-4');
+            nextBtn.style.background = 'linear-gradient(135deg, #ff758f, #ff477e)';
+            nextBtn.style.boxShadow = '0 6px 15px rgba(255, 71, 126, 0.3)';
+            nextBtn.style.opacity = '1';
+            nextBtn.style.pointerEvents = 'auto';
+        }
+    }
+
+    function buildGastroScreen() {
+        const container = document.getElementById('gastro-container');
+        const isParkSelected = appState.attraction.includes('Spacer po parku');
+        
+        let html = `
+            <button class="tile-btn" onclick="selectTile('food', 'Sushi 🍣', this)"><span>Sushi 🍣</span></button>
+            <button class="tile-btn" onclick="selectTile('food', 'Pizza 🍕', this)"><span>Pizza 🍕</span></button>
+            <button class="tile-btn" onclick="selectTile('food', 'Kuchnia tajska/ramen 🍜', this)"><span>Kuchnia tajska/ramen 🍜</span></button>
+            <button class="tile-btn" onclick="selectTile('food', 'Burgery 🍔', this)"><span>Burgery 🍔</span></button>
+        `;
+
+        if (isParkSelected) {
+            html += `<button class="tile-btn full-row" style="background: #edf2f7; border-color: #ff477e; color: #ff477e;" onclick="selectTile('food', 'Kolacja z widokiem na wodę... 🌊', this)"><span>🔥 Kolacja z widokiem na wodę... 🌊</span></button>`;
+        } else {
+            html += `<button class="tile-btn full-row" onclick="selectTile('food', 'Coś na słodko 🍰', this)"><span>Coś na słodko 🍰</span></button>`;
+        }
+
+        container.innerHTML = html;
+        appState.food = '';
+        const nextBtn = document.getElementById('next-4');
+        nextBtn.style.background = '#cbd5e0';
+        nextBtn.style.boxShadow = 'none';
+        nextBtn.style.opacity = '0.5';
+        nextBtn.style.pointerEvents = 'none';
+    }
+
+    function selectDate(dateVal, element) {
+        document.querySelectorAll('.cal-btn').forEach(el => el.classList.remove('selected'));
+        element.classList.add('selected');
+        appState.date = dateVal;
+
+        document.getElementById('time-section').classList.add('visible');
+        checkFinalButton();
+    }
+
+    function selectTime(timeVal, element) {
+        document.querySelectorAll('.time-btn').forEach(el => el.classList.remove('selected'));
+        element.classList.add('selected');
+        appState.time = timeVal;
+
+        checkFinalButton();
+    }
+
+    function checkFinalButton() {
+        if (appState.date && appState.time) {
+            const finalBtn = document.getElementById('next-5');
+            finalBtn.style.background = 'linear-gradient(135deg, #52b788, #74c69d)';
+            finalBtn.style.boxShadow = '0 6px 15px rgba(82, 183, 136, 0.3)';
+            finalBtn.style.opacity = '1';
+            finalBtn.style.pointerEvents = 'auto';
+        }
+    }
+
+    function finalizeAndSend() {
+        document.getElementById('ticket-attraction').innerText = appState.attraction;
+        document.getElementById('ticket-food').innerText = appState.food;
+        document.getElementById('ticket-date').innerText = appState.date + '.2026';
+        document.getElementById('ticket-time').innerText = appState.time;
+
+        changeStep(6);
+
+        const messageContent = `🚨 **NOWA REZERWACJA RANDKI OD KINGI!** 🚨\n\n` +
+                               `📍 **Atrakcja:** ${appState.attraction}\n` +
+                               `🍔 **Jedzenie:** ${appState.food}\n` +
+                               `📅 **Data:** ${appState.date}.2026\n` +
+                               `⏰ **Godzina:** ${appState.time}\n\n` +
+                               `*Wszystko działa idealnie!*`;
+
+        if (WEBHOOK_URL && WEBHOOK_URL !== "TWÓJ_WEBHOOK_URL_TUTAJ") {
+            fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content: messageContent })
+            })
+            .then(response => console.log('Wysłano.'))
+            .catch(error => console.error('Błąd:', error));
+        }
+    }
+</script>
+
+</body>
+</html>
