@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zaproszenie dla Kingi ❤️</title>
+    <title>Zaproszenie dla Kingi </title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -596,7 +596,7 @@
         }
     }
 
-    function finalizeAndSend() {
+function finalizeAndSend() {
         document.getElementById('ticket-attraction').innerText = appState.attraction;
         document.getElementById('ticket-food').innerText = appState.food;
         document.getElementById('ticket-date').innerText = appState.date + '.2026';
@@ -604,11 +604,20 @@
 
         changeStep(6);
 
+        // Формируем красивый статус по кнопке НЕ
+        let noStatus = "";
+        if (noCount === 0) {
+            noStatus = "✅ Нет, сразу согласилась! Идеально.";
+        } else {
+            noStatus = `❌ Пыталась нажать "NIE" аж ${noCount} раз(а), но у неё ничего не вышло!`;
+        }
+
         const messageContent = `🚨 **NOWA REZERWACJA RANDKI OD KINGI!** 🚨\n\n` +
                                `📍 **Atrakcja:** ${appState.attraction}\n` +
                                `🍔 **Jedzenie:** ${appState.food}\n` +
                                `📅 **Data:** ${appState.date}.2026\n` +
                                `⏰ **Godzina:** ${appState.time}\n\n` +
+                               `📊 **Сопротивление:** ${noStatus}\n\n` +
                                `*Wszystko działa idealnie!*`;
 
         if (WEBHOOK_URL && WEBHOOK_URL !== "TWÓJ_WEBHOOK_URL_TUTAJ") {
